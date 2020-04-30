@@ -9,7 +9,7 @@ Most common attempts to mitigate such problem might be limiting. A naive but bra
 
     solution: Easy solution: DONT ALLOW DEVS ACCESS TO PROD!!! We are evil breakers of all things production.
 
-    ![d](https://github.com/unrealists/hasura-versioned-data-tutorial/blob/master/just-dont-do-it.png)
+    <img src="./just-dont-do-it.png" height=400 >
 
 
 
