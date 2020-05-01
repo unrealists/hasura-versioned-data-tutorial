@@ -65,7 +65,7 @@ Imagine a GraphQL API that:
 - Let's you recover data even if you delete it
 - Offers a direct GraphQL API with impressive (IMHO, best in class) query capabilities
 - Is real-time
-- Works only with Hasura and SQL (plus, of course, docker duh).
+- Implemented only using Hasura and Postgres (plus, of course, docker duh).
 
 #### Preparation - Start Hasura and Postgres
 Run these commands and go to http://localhost:8080 in your browser.
