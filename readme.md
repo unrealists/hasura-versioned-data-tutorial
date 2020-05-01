@@ -16,7 +16,7 @@ Most common attempts to mitigate such problem might be limiting. A naive but bra
 ![](./1.png)
 source: https://stackoverflow.com/questions/14438055/prevent-accidental-updates-deletes-on-any-table
 
-You read it right, `it is easy piezy, just don't do it bro!`. Probably, you have got such advice as well. It is not such bad advice either. It might be useful for some, very limited, use cases. 
+You read it right, `it is easy-peasy, just don't do it!`. Probably, you have got such advice as well. It is not such bad advice either. It might be useful for some, very limited, use cases. 
 
 ###### PS: Before we move on, let's appriciate, our hero, `MGOwen` speaking for all of us: `If "just don't ever make mistakes" was a valid argument, we wouldn't need seatbelts and firearm safety switches`._
 
@@ -55,7 +55,7 @@ So I wanted to give it a try.
 
 ##  Brief Glimpse into my joy
 
-I will be way more quick with this one. I want, _very quickly and simply_, to show you that what I am capable of doing with this badboy. So don't whine to me that this example is too simple. You can do way more than what I am about to show you. with that said, here we go...
+I will be way more quick with this one. I want, _very quickly and simply_, to show you that what I am capable of doing with this bad boy. So don't whine to me that this example is too simple. You can do way more than what I am about to show you. with that said, here we go...
 
 Imagine a GraphQL API that:
 - Versions any change you can do to a database table
