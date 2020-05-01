@@ -1,4 +1,5 @@
 #  Version Your Data and Serve It via Real-time API<sup>*</sup>
+###### <sup>*</sup>Like a boss.
 
 This is going to be a bit long but I think it really matters that you understand where my intentions are coming from.
 
