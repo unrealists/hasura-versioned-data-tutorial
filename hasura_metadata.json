@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "tables": [
+    {
+      "table": {
+        "schema": "public",
+        "name": "example"
+      },
+      "array_relationships": [
+        {
+          "name": "versions",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "versioned",
+                "name": "example"
+              },
+              "column_mapping": {
+                "id": "id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "versioned",
+        "name": "example"
+      }
+    }
+  ]
+}
