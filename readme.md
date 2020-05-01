@@ -39,7 +39,7 @@ I saw people developing kickass applications with extreme interactivity using Fi
 
 I was desperate ...
 
-##  A Hero that I have not ask for...
+##  A Hero that I did not ask for
 
 GraphQL **Subscriptions** defined my search criteria. After a lot of struggle, I started to look for a solution that provides real-time interactivity on top of **my very own data model** with minimal effort. Remember, I want to have all the bells and whistles of the reactive world without sacrificing a custom data model that provides built in versioning. I know I ask for a lot but I'm a dreamer. 
 
@@ -69,6 +69,7 @@ run these commands and go to http://localhost:8080 in your browser.
  $ wget https://raw.githubusercontent.com/hasura/graphql-engine/stable/install-manifests/docker-compose/docker-compose.yaml
  $ docker-compose up -d
 ```
+have questions? Not my problem. I'm here to tell my story. follow this [link](https://hasura.io/docs/1.0/graphql/manual/getting-started/docker-simple.html) if you ever fail to run a simple docker-compose command...
 
 For docker questions follow this [link](https://hasura.io/docs/1.0/graphql/manual/getting-started/docker-simple.html)
 
@@ -90,17 +91,18 @@ Here is a gif for you. Hasura Console is enough to create this table without any
 ![](./3.gif)
 
 Final table has following DDL:
-```
-create table "Users"
+```sql
+CREATE TABLE IF NOT EXISTS example
 (
-    id          uuid default gen_random_uuid()                    not null,
-   _id          serial                                            not null
-                constraint "Users_pkey"
-                primary key,
-    created_at timestamp with time zone default now()             not null,
-    data       jsonb                                              not null,
-    deleted    boolean
+    id         UUID                     DEFAULT gen_random_uuid() NOT NULL,
+    v_id       SERIAL                                             NOT NULL
+               CONSTRAINT example_pkey
+               PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()             NOT NULL ,
+    data       JSONB,
+    deleted    BOOLEAN
 );
+COMMENT ON TABLE example IS 'an example table';
 ```
 
 #### 2 - Meet our view: Users
@@ -109,32 +111,33 @@ This part is the most tricky part of all. We need to create a `SQL View` to repr
 
 Bear with me and take a look at this ugly query.
 
-```
-CREATE VIEW "Users"(_id, id, updated_at, data, created_at) as
+```sql
+CREATE OR REPLACE VIEW public.example as
 WITH last_version AS (
     SELECT
-       v._id,
-       v.id,
-       v.created_at AS updated_at,
-       v.data
-    FROM versioned."Users" v
-    LEFT JOIN versioned."Users" v2 ON v._id < v2._id AND v.id = v2.id
-    WHERE v2._id IS NULL AND v.deleted IS NULL
+       v_e.v_id,
+       v_e.id,
+       v_e.created_at AS updated_at,
+       v_e.data
+    FROM versioned.example v_e
+    LEFT JOIN versioned.example v_e2 ON v_e.v_id < v_e2.v_id AND v_e.id = v_e2.id
+    WHERE v_e2.v_id IS NULL AND v_e.deleted IS NULL
 ), first_version AS (
     SELECT
-        v.id,
-        v.created_at
-    FROM versioned."Users" v
-    LEFT JOIN versioned."Users" v2 ON v._id > v2._id AND v.id = v2.id
-    WHERE v2._id IS NULL
-     )
-SELECT lv._id,
-       lv.id,
+        v_e.id,
+        v_e.created_at
+    FROM versioned.example v_e
+    LEFT JOIN versioned.example v_e2 ON v_e.v_id > v_e2.v_id AND v_e.id = v_e2.id
+    WHERE v_e2.v_id IS NULL
+)
+SELECT lv.id,
+       lv.v_id,
        lv.updated_at,
        lv.data,
        fv.created_at
 FROM last_version lv
 LEFT JOIN first_version fv ON fv.id = lv.id;
+COMMENT ON VIEW example is 'an example view:)';
 ```
 
 Lets break this down:
@@ -152,33 +155,132 @@ SELECT lv._id,
 FROM last_version lv
 LEFT JOIN first_version fv ON fv.id = lv.id;
 ```
+This is one of many ways of retrieving `first/last value within group`. In real life I use more eloborate but more performant ways of doing same job. I just wanted to showcase what I meant with a simple example. Check out these links to get better idea about these patterns([1](https://thoughtbot.com/blog/ordering-within-a-sql-group-by-clause), [2](https://www.red-gate.com/simple-talk/sql/database-administration/sql-strategies-for-versioned-data/), [3](https://hakibenita.com/sql-group-by-first-last-value)). Internet is full of them.
 
-This is one of many ways of retrieving the first or last value within a group. In real life I use more eloborate but more performant ways of doing same job. I just wanted to showcase what I meant with a simple example.
-Check out these links to get a better idea about these patterns ([1](https://thoughtbot.com/blog/ordering-within-a-sql-group-by-clause), [2](https://www.red-gate.com/simple-talk/sql/database-administration/sql-strategies-for-versioned-data/), [3](https://hakibenita.com/sql-group-by-first-last-value)).
-
-And of course, don't forget to add it to Hasura:
+Don't forget to add it to Hasura:
 ![](./4.png)
 
-#### 3 - Meet our relation: Versions
-
-As promised, our approach will **_let you see all historical versions along side with the current version_**.
-
-Hasura comes to our rescue:
-
+#### 3- Meet our relation: Versions
+As I promised, our approach will **_let you see all historical versions along side with current version_**.
+Hasura comes to our resque:
 ![](./5.gif)
 
-Now we are able to reference each version of our record alongside with the most recent one.
+Now we are able to reference each version of our record alongside with most recent one.
+
+#### STEP 4 -> This is not the step you are looking for.
+No more steps. We are done and let's enjoy our new API. Here is a glimpse of joyful use of realtime versioned api we have just created without wasted sprints by a team of engineers. I'm going to add/update/delete/undelete an example record using Hasura GraphiQL UI. In the meantime, all of my actions will be tracked in realtime using a GraphQL subscription query. Let's have a look at our query:
+
+```
+// $id -> id of the record we are watching
+subscription watchExample($id: uuid) { 
+// we place our variable to filter example records in true SQL fashion 
+    example(where: {id: {_eq: $id}}) { 
+        id
+        v_id
+        updated_at
+        created_at
+        data
+// Hasura lets you run aggregate queries using GraphQL. 
+// Here we are aggregating number of versions per each example record!
+        versions_aggregate {
+            aggregate {
+                count(columns: v_id)
+            }
+        }
+// We are also getting versions of each record.
+        versions {
+            v_id
+            created_at
+            deleted
+            data
+        }
+    }
+}
+
+```
+
+- **Adding record:** We will be adding record using `insert_versioned_example` mutation automatically created by Hasura. Note that, our schema naming convention comes handy here.
+```
+mutation addExample($data: jsonb) {
+  insert_versioned_example(objects: {data: $data}) {
+    returning {
+      id
+      v_id
+      created_at
+      data
+      deleted
+    }
+  }
+}
+
+```
+Note that as, initially, we have no example recods, our subscription query has no filter value. After first insert, we update our subscription query to watch one particular example record.
+![](./6.gif)
+
+
+- **Updating record:** Update operation is another insert operation with an `id`. But thanks to the way our example view is setup, we only will see last record. 
+
+```
+mutation updateExample($id:uuid,$data: jsonb) {
+  insert_versioned_example(objects: {id:$id, data: $data}) {
+    returning {
+      id
+      v_id
+      created_at
+      data
+      deleted
+    }
+  }
+}
+```
+![](./7.gif)
+
+- **Deleting record:** Delete operation is also an insert operation with an `id` and `deleted`(with value set to `true`). 
+
+```
+mutation deleteExample($id:uuid) {
+  insert_versioned_example(objects: {id:$id, deleted: true}) {
+    returning {
+      id
+      v_id
+      created_at
+      data
+      deleted
+    }
+  }
+}
+```
+![](./8.gif)
+
+- **Undelete/Recover record:** This just another update operation. As value of `delete` column is not set to `true` for last version of a particular example record, we will see it back with all recious versions retained!
+
+```
+mutation updateExample($id:uuid,$data: jsonb) {
+  insert_versioned_example(objects: {id:$id, data: $data}) {
+    returning {
+      id
+      v_id
+      created_at
+      data
+      deleted
+    }
+  }
+}
+```
+![](./9.gif)
+
 
 ## Conclusion
+Consider Hasura as a SQL generator engine for your GraphQL API.
+It is a very powerful **single** layer for your application.
+Investigating generated SQL queries for given operation is mostly enough to understand what is happening under the hood.
+This transparency is very rare to find for a product that provides such capabilities.
+However, for high stake tasks, such as finance, utilizing a very trivial use of [actions](https://hasura.io/docs/1.0/graphql/manual/actions/index.html) to control and enhance your API layer can be crucial. 
 
-Consider Hasura as a SQL generator engine for your GraphQL API. It is a very powerful **single** layer for your application. Investigating the generated SQL query for a given operation is mostly enough to understand what is happening under the hood. This transparency is very rare to find for a product that provides such capabilities.
-
-However, for high stake tasks, such as finance, utilizing a very trivial use of [actions](https://hasura.io/docs/1.0/graphql/manual/actions/index.html) to control and enhance the API layer can be quite crucial. 
-
-With this approach, you are only **inserting new records** into your DB. We must take away any `UPDATE`, `DELETE`, `TRUNCATE` privilages from operating DB users. In addition to that, Hasura, must limit the access to the corresponding mutations using various techniques such as [Whitelisting](https://hasura.io/docs/1.0/graphql/manual/deployment/allow-list.html), [Authorization & Access Control](https://hasura.io/docs/1.0/graphql/manual/auth/authorization/index.html).
-
-I have not touched such aspects within the scope of this tutorial. However, they are very powerful and useful abstraction mechanisms. 
-
-That's it. We are done and can enjoy our new API. Here is a glimpse of the joyful use of the real-time versioned API we have just created without wasting sprints by a team of engineers.
-
+With this approach, you are only **inserting new records** to your DB.
+We must take away any `UPDATE`, `DELETE`, `TRUNCATE` privilages from the operating DB user.
+In addition to that, Hasura must limit the access to corresponding mutations using various techniques such as [Whitelisting](https://hasura.io/docs/1.0/graphql/manual/deployment/allow-list.html),
+[Authorization & Access Control](https://hasura.io/docs/1.0/graphql/manual/auth/authorization/index.html).
+I haven't touched such aspects within the scope of this tutorial.
+However, they are very powerful and useful abstraction mechanisms. 
 
