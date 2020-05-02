@@ -56,7 +56,7 @@ So I wanted to give it a try.
 
 ##  A glimpse into my joy
 
-I will be way quicker with this one. I want to, *very quickly and simply*, show you that what I am capable of doing with this bad boy. You can do way more than what I am about to show you but for the sake of keeping it quick and simple. Here we go...
+I will be way quicker with this one. I want to, *very quickly*, show you that what I am capable of doing with this bad boy. You can do way more than what I am about to show you. But for the sake of clarity, I'm keeping it quick and simple . Here we go...
 
 Imagine a GraphQL API that:
 
