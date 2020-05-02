@@ -19,13 +19,8 @@ You can jump to, [A glimpse into my joy](#a-glimpse-into-my-joy) section if you 
   * [Search for a safe heaven with my buddy Postgres](#search-for-a-safe-heaven-with-my-buddy-postgres)
   * [A Hero that I did not ask for](#a-hero-that-i-did-not-ask-for)
   * [A glimpse into my joy](#a-glimpse-into-my-joy)
-      - [Preparation - Start Hasura and Postgres](#preparation---start-hasura-and-postgres)
-      - [STEP 1 - Meet our _versioned_ DB table: _example_](#step-1---meet-our--versioned--db-table---example-)
-      - [STEP 2 -> Meet our DB view: _example_](#step-2----meet-our-db-view---example-)
-      - [STEP 3- Meet our relation: _versions_](#step-3--meet-our-relation---versions-)
-      - [STEP 4 -> This is not the step you are looking for.](#step-4----this-is-not-the-step-you-are-looking-for)
   * [Conclusion](#conclusion)
-          + [PS: if you are a TLDR kind of person, you can check out my repo and replicate this tutorial easily. First execute the contents of `db_schema_dump.sql` and load the metadata using `hasura_metadata.json`](#ps--if-you-are-a-tldr-kind-of-person--you-can-check-out-my-repo-and-replicate-this-tutorial-easily-first-execute-the-contents-of--db-schema-dumpsql--and-load-the-metadata-using--hasura-metadatajson-)
+         
   * [Fast forward one year](#fast-forward-one-year)
 
 
