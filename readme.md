@@ -276,7 +276,7 @@ mutation updateExample($id:uuid,$data: jsonb) {
 ![](./assets/9.gif)
 
 
-- **BONUS:** Let's query our table across all historial versions.
+- **BONUS:** Let's query our table across all versions.
 ![](./assets/12.gif)
 
 Pretty neat isn't it?
@@ -295,9 +295,7 @@ In addition to that, Hasura must limit the access to corresponding mutations usi
 I haven't touched such aspects within the scope of this tutorial.
 However, they are very powerful and useful abstraction mechanisms. 
 
-###### PS: if you are TLDR kind of person, you can check out my repo and replicate this tutorial easily.
-
-First execute contents of `db_schema_dump.sql` and load metadata using `hasura_metadata.json`
+###### PS: if you are TLDR kind of person, you can check out my repo and replicate this tutorial easily. First execute contents of `db_schema_dump.sql` and load metadata using `hasura_metadata.json`
 ![](./assets/10.gif)
 ![](./assets/11.gif)
 
