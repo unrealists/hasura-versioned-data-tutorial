@@ -54,7 +54,7 @@ So I wanted to give it a try.
 
 ##  A glimpse into my joy
 
-I will be way quicker with this one. I want to, *very quickly and simply*, show you that what I am capable of doing with this bad boy. You can do way more than what I am about to show you but for the sake of keeping it quick and simple. Here we go...
+I will be way quicker with this one. I want to, *very quickly*, show you that what I am capable of doing with this bad boy. You can do way more than what I am about to show you but I'm keeping it simple. Here we go...
 
 Imagine a GraphQL API that:
 
@@ -295,7 +295,7 @@ In addition to that, Hasura must limit the access to corresponding mutations usi
 I haven't touched such aspects within the scope of this tutorial.
 However, they are very powerful and useful abstraction mechanisms. 
 
-###### PS: if you are TLDR kind of person, you can check out my repo and replicate this tutorial easily. First execute contents of `db_schema_dump.sql` and load metadata using `hasura_metadata.json`
+###### PS: if you are a TLDR kind of person, you can check out my repo and replicate this tutorial easily. First execute the contents of `db_schema_dump.sql` and load the metadata using `hasura_metadata.json`
 ![](./assets/10.gif)
 ![](./assets/11.gif)
 
@@ -303,7 +303,7 @@ ___
 ## Fast forward one year
 
 
-Today, Hasura is a staple member of my tech stack on every project that can benefit from GraphQL. I am grateful for people who made it happen. A big thank you from a dreamer who, happily, has nostalgia for the 90s.
+Today, Hasura is a staple member of my tech stack on every project that can benefit from GraphQL. I am grateful for the people who made it happen. A big thank you from a dreamer who has happy nostalgia for the 90s.
 
 Stay safe and sound,
 
