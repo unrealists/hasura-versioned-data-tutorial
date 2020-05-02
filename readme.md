@@ -8,7 +8,7 @@ A GraphQL API that:
 - Let's you recover data even if you delete it
 - Offers a direct GraphQL API with impressive (IMHO, best in class) query capabilities
 - Is real-time
-- Works only with Hasura and SQL (plus, of course, docker duh).
+- Implemented only with Hasura and Postgres (plus, of course, docker duh).
 
 You can jump to, [A glimpse into my joy](#a-glimpse-into-my-joy) section if you are not into the story. No hard feelings, all good.
 
