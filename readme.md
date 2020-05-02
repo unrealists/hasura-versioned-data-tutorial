@@ -277,6 +277,7 @@ mutation updateExample($id:uuid,$data: jsonb) {
 
 
 - **BONUS:** Let's query our table across all versions.
+
 ![](./assets/12.gif)
 
 Pretty neat isn't it?
