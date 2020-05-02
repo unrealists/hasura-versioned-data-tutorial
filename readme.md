@@ -1,5 +1,4 @@
 #  Version Your Data and Serve It via Real-time API<sup>*</sup>
-###### <sup>*</sup>Like a boss.
 
 This is going to be a bit long but I think it really matters that you understand where my intentions are coming from.
 
@@ -34,7 +33,7 @@ I am going to tell you my story of finding a true lean way of developing real-ti
 *"Versioning data? So what? It is not rocket science"*, I hear you say and you are right. I mean, let me be honest, I have found many different ways to mitigate this problem in the past. There are myriad of ways to implement a platform with a versioned data model. That is not the point. The cost (both time and money) that such implementations often come attached with give start-ups a big smack in the face especially when they have to be agile. You see your friends enjoying building shiny new APIs backed by simple CRUD systems and start their start-up journey months ahead while you fight with tons of quirky data models to offer a brand new finance app to the world while regulators are stalking you. 
 
 
-Back in the days, I semi-successfully co-founded a Business Intelligence SaaS company. There, my obsession was the inner workings of relational databases and I kept that obsession to this day. Out of all aspects of relational DBs, I was mostly interested in how they treat SQL. I feel in love with versatility and expresiveness of SQL. This was the time of where I was considered old fashined due to my views on new age databases whose query languages were utterly joke compared to SQL. When my friends were trying to shame me due to my loyalty towards SQL and skepticism towards NoSQL conventions, I was throwing back at them my buddy Postgres. Its use of SQL and modular architecture with a rock solid stability(and of course, performance) was keeping NoSQL fanboys at bay. But they were still shouting outside. 
+Back in the days, I semi-successfully co-founded a Business Intelligence SaaS company. There, my obsession was the inner workings of databases and I kept that obsession to this day. Out of all aspects of DBs, I was mostly interested in how they treat SQL. I love any database that has first class SQL support. When my friends were trying to shame me due to my loyalty towards SQL and skepticism towards new age NoSQL conventions, I was throwing back at them my buddy Postgres. Its use of SQL and modular architecture with a rock solid stability(and of course, performance) was keeping NoSQL fanboys at bay. But they were still shouting outside. 
 
 **"Good luck with wasted resources on developing cool APIs on top of your DB from the 90s"**
 
@@ -56,7 +55,7 @@ So I wanted to give it a try.
 
 ##  A glimpse into my joy
 
-I will be way quicker with this one. I want to, *very quickly*, show you that what I am capable of doing with this bad boy. You can do way more than what I am about to show you. But for the sake of clarity, I'm keeping it quick and simple . Here we go...
+I will be way quicker with this one. I want to, *very quickly and simply*, show you that what I am capable of doing with this bad boy. You can do way more than what I am about to show you but for the sake of keeping it quick and simple. Here we go...
 
 Imagine a GraphQL API that:
 
@@ -65,7 +64,7 @@ Imagine a GraphQL API that:
 - Let's you recover data even if you delete it
 - Offers a direct GraphQL API with impressive (IMHO, best in class) query capabilities
 - Is real-time
-- Implemented only using Hasura and Postgres (plus, of course, docker duh).
+- Works only with Hasura and SQL (plus, of course, docker duh).
 
 #### Preparation - Start Hasura and Postgres
 Run these commands and go to http://localhost:8080 in your browser.
@@ -275,6 +274,10 @@ mutation updateExample($id:uuid,$data: jsonb) {
 }
 ```
 ![](./9.gif)
+
+
+- **BONUS:** Let's query our table across all historial versions.
+![](./12.gif)
 
 Pretty neat isn't it?
 
