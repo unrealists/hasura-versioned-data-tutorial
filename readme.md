@@ -1,6 +1,16 @@
 #  Version Your Data and Serve It via Real-time API
-This is going to be a bit long but I think it really matters that you understand where my intentions are coming from.
+This is going to be a bit long but I think it really matters that you understand where my intentions are coming from. Before we start, Here is what this post promises:
 
+A GraphQL API that:
+
+- Versions any change you can do to a database table
+- Shows you all historical versions alongside with the current version
+- Let's you recover data even if you delete it
+- Offers a direct GraphQL API with impressive (IMHO, best in class) query capabilities
+- Is real-time
+- Works only with Hasura and SQL (plus, of course, docker duh).
+
+You can jump to, "*__A glimpse into my joy__*" section if you are not into the story. No hard feelings, all good.
 
 ## Problem
 
@@ -54,16 +64,7 @@ So I wanted to give it a try.
 
 ##  A glimpse into my joy
 
-I will be way quicker with this one. I want to, *very quickly*, show you that what I am capable of doing with this bad boy. You can do way more than what I am about to show you but I'm keeping it simple. Here we go...
-
-Imagine a GraphQL API that:
-
-- Versions any change you can do to a database table
-- Shows you all historical versions alongside with the current version
-- Let's you recover data even if you delete it
-- Offers a direct GraphQL API with impressive (IMHO, best in class) query capabilities
-- Is real-time
-- Works only with Hasura and SQL (plus, of course, docker duh).
+I will be way quicker with this one. I want to, *very quickly*, show you that what I am capable of doing with this bad boy. You can do way more than what I promised in the begining of the post but I'm keeping it simple. Here we go...
 
 #### Preparation - Start Hasura and Postgres
 Run these commands and go to http://localhost:8080 in your browser.
