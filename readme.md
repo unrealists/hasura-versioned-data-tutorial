@@ -1,28 +1,10 @@
-#  Version Your Data and Serve It via Real-time API
-This is going to be a bit long but I think it really matters that you understand where my intentions are coming from. Before we start, Here is what this post promises:
-
-A GraphQL API that:
-
-- Versions any change you can do to a database table
-- Shows you all historical versions alongside with the current version
-- Let's you recover data even if you delete it
-- Offers a direct GraphQL API with impressive (IMHO, best in class) query capabilities
-- Is real-time
-- Implemented only with Hasura and Postgres (plus, of course, docker duh).
-
-You can jump to, [A glimpse into my joy](#a-glimpse-into-my-joy) section if you are not into the story. No hard feelings, all good.
-
+#  Version Your Data and Serve with Hasura
 
 ### ToC
   * [Problem](#problem)
   * [Premise](#premise)
-  * [Search for a safe heaven with my buddy Postgres](#search-for-a-safe-heaven-with-my-buddy-postgres)
-  * [A Hero that I did not ask for](#a-hero-that-i-did-not-ask-for)
-  * [A glimpse into my joy](#a-glimpse-into-my-joy)
+  * [Solution](#Solution)
   * [Conclusion](#conclusion)
-         
-  * [Fast forward one year](#fast-forward-one-year)
-
 
 
 
@@ -39,7 +21,7 @@ Most common attempts to mitigate said problem might be limiting. A naive but bra
 ![](./assets/1.png)
 source: https://stackoverflow.com/questions/14438055/prevent-accidental-updates-deletes-on-any-table
 
-You read it right, `it is easy peasy, just don't do it bro!`. It is not a super bad advice. Infact, you probably received such advice as well.  It might be useful for some, very limited, use cases. Anyways, let our hero, `MGOwen` speak for all of us: `If "just don't ever make mistakes" was a valid argument, we wouldn't need seatbelts and firearm safety switches`.
+You read it right, `it is easy peasy, just don't do it!`. It is not a super bad advice. Infact, you probably received such advice as well.  It might be useful for some, very limited, use cases. Anyways, let our hero, `MGOwen` speak for all of us: `If "just don't ever make mistakes" was a valid argument, we wouldn't need seatbelts and firearm safety switches`.
 
 ## Premise
 
@@ -47,38 +29,22 @@ What if preventing update is not an option? Let's think even more extreme and em
 
 Welcome to my world, ladies, gentlemen and other gender members. I spent most of my career dealing with fintechs and finance companies in general. There is one capability you **must have** as a financial service provider. ***Every action must be logged alongside with corresponding data. Otherwise, you are liable for any financial crime occuring at your platform.*** This is the way of fintech life, you have to suck it up. 
 
-I am going to tell you my story of finding a true lean way of developing real-time APIs on complex data models, including versioned ones, with minimal effort.
+"Versioning data? So what? It is not rocket science", I hear you say and you are right. I mean, let me be honest, I have found many different ways to mitigate this problem in the past. There are myriad of ways to implement a platform with a versioned data model. That is not the point. The cost (both time and money) that such implementations often come attached with give start-ups a big smack in the face especially when they have to be agile. You see your friends enjoying building shiny new APIs backed by simple CRUD systems and start their start-up journey months ahead while you fight with tons of quirky data models to offer a brand new finance app to the world while regulators are stalking you.
+
+Hasura is a perfect tool to add API on top of such data models with ease.
 
 
 
-## Search for a safe heaven with my buddy Postgres
+##  Solution
 
-*"Versioning data? So what? It is not rocket science"*, I hear you say and you are right. I mean, let me be honest, I have found many different ways to mitigate this problem in the past. There are myriad of ways to implement a platform with a versioned data model. That is not the point. The cost (both time and money) that such implementations often come attached with give start-ups a big smack in the face especially when they have to be agile. You see your friends enjoying building shiny new APIs backed by simple CRUD systems and start their start-up journey months ahead while you fight with tons of quirky data models to offer a brand new finance app to the world while regulators are stalking you. 
+I will be way quicker with this one. I want to, *very quickly*, show you that what I am capable of doing with this bad boy. You can do way more than what I promised in the begining of the post but I'm keeping it simple. We are going to build a GraphQL API that:
 
-
-Back in the days, I semi-successfully co-founded a Business Intelligence SaaS company. There, my obsession was the inner workings of databases and I kept that obsession to this day. Out of all aspects of DBs, I was mostly interested in how they treat SQL. I love any database that has first class SQL support. When my friends were trying to shame me due to my loyalty towards SQL and skepticism towards new age NoSQL conventions, I was throwing back at them my buddy Postgres. Its use of SQL and modular architecture with a rock solid stability(and of course, performance) was keeping NoSQL fanboys at bay. But they were still shouting outside. 
-
-**"Good luck with wasted resources on developing cool APIs on top of your DB from the 90s"**
-
-I saw people developing kickass applications with extreme interactivity using Firebase, RethinkDB and co, served behind a shiny cool GraphQL API, consumed by even shinier patterns like Redux. These guys were cool guys. To be fair, they really looked cool too. It was not just a gimmick. I was dreaming to have a company where I could build a kick ass finance product with such tech stack. In the last fintech company I co-founded, it was my stage to show the world that I can also tackle those challenges with Postgres and without hiring half of the developers in Berlin. Well, *NOPE* it did not happen. Even though we used GraphQL, providing a reactive API aka **Subcriptions** backed by a traditional Database (***with versioned data structures***) is really harder than I imagined.
-
- I almost gave up and even cheated my beloved Postgres with Firebase. I'm not going to comment on that experience much but here is what I get to say about it: *"It ended up being a huge disapointment and regret"*. It is a beast that can't perform a basic [logical `OR` operation](https://stackoverflow.com/questions/46726673/firebase-firestore-or-query) in 2020. Let that sink in.
-
-I was desperate ...
-
-##  A Hero that I did not ask for
-
-GraphQL **Subscriptions** defined my search criteria. After a lot of struggle, I started to look for a solution that provides real-time interactivity on top of **my very own data model** with minimal effort. Remember, I want to have all the bells and whistles of the reactive world without sacrificing a custom data model that provides built in versioning. I know I ask for a lot but I'm a dreamer. 
-
-First, my friends pointed me towards another Berlin based start-up called graph.cool and their baby product called **Prisma**. It was a very compelling product. It almost got me using it. At that time(early 2019), their support for subscriptions when data is nested, was tricky. Besides all, Prisma did not support my data layer if it is not built by them. You can imagine that my old buddy Postgres can do wonders in terms of how flexible you can model your data layer. Prisma was having none of it.
-
-Then I saw Hasura. It was too good to be true. They were claiming that any possible query you can come up with can also be a subscription. Moreover, *this is where they got me in*, Hasura supported my very own data model. As if this is not enough, Hasura had a very promising permission system where I could build a role-based access control model using JSON Web Tokens (This aspect is another killer feature alone but I'm not going to talk about it today, here are some nice sources that inspired me though ([1](https://dev.to/lineup-ninja/modelling-teams-and-user-security-with-hasura-204i)[, 2)](https://hasura.io/blog/access-control-patterns-with-hasura-graphql-engine/). All of these features can be done with minimal or zero coding.
-
-So I wanted to give it a try. 
-
-##  A glimpse into my joy
-
-I will be way quicker with this one. I want to, *very quickly*, show you that what I am capable of doing with this bad boy. You can do way more than what I promised in the begining of the post but I'm keeping it simple. Here we go...
+- Versions any change you can do to a database table
+- Shows you all historical versions alongside with the current version
+- Let's you recover data even if you delete it
+- Offers a direct GraphQL API with impressive (IMHO, best in class) query capabilities
+- Is real-time
+- Implemented only with Hasura and Postgres (plus, of course, docker duh).
 
 #### Preparation - Start Hasura and Postgres
 Run these commands and go to http://localhost:8080 in your browser.
@@ -314,15 +280,6 @@ However, they are very powerful and useful abstraction mechanisms.
 ![](./assets/10.gif)
 ![](./assets/11.gif)
 
-___
-## Fast forward one year
-
-
-Today, Hasura is a staple member of my tech stack on every project that can benefit from GraphQL. I am grateful for the people who made it happen. A big thank you from a dreamer who has happy nostalgia for the 90s.
-
-Stay safe and sound,
-
-K
 
 
 
