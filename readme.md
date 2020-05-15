@@ -76,7 +76,7 @@ Here is a gif for you. Hasura Console is enough to create this table without any
 
 Final table has following DDL:
 ```sql
-CREATE TABLE IF NOT EXISTS example
+CREATE TABLE IF NOT EXISTS versioned.example
 (
     id         UUID                     DEFAULT gen_random_uuid() NOT NULL,
     v_id       SERIAL                                             NOT NULL
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS example
     data       JSONB,
     deleted    BOOLEAN
 );
-COMMENT ON TABLE example IS 'an example table';
+COMMENT ON TABLE versioned.example IS 'an example table';
 ```
 
 #### STEP 2 -> Meet our DB view: _example_	
