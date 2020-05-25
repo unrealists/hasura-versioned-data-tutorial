@@ -1,4 +1,4 @@
-#  Version Your Data and Serve with Hasura
+#  Version and Serve Your Data with Hasura
 
 ### ToC
   * [Problem](#problem)
