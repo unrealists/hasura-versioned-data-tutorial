@@ -144,7 +144,7 @@ This is one of many ways of retrieving `first/last value within group`. In real 
 Don't forget to add it to Hasura:
 ![](./assets/3b.gif)
 
-#### STEP 3- Meet our relation: _versions_
+#### STEP 3-> Meet our relation: _versions_
 As I promised, our approach will **_let you see all historical versions along side with current version_**.
 We will connect `versioned.example` table with `public.example` view on `id` column. As each example record potentially has many versions, we need one to many, aka array,  relationship. _Hasura Relationships_ comes to our resque:
 ![](./assets/5.gif)
@@ -186,6 +186,8 @@ subscription watchExample($id: uuid) {
 ```
 
 - **Adding record:** We will be adding record using `insert_versioned_example` mutation automatically created by Hasura. Note that, our schema naming convention comes handy here.
+
+
 ```
 mutation addExample($data: jsonb) {
   insert_versioned_example(objects: {data: $data}) {
@@ -200,6 +202,8 @@ mutation addExample($data: jsonb) {
 }
 
 ```
+
+
 Note that as, initially, we have no example recods, our subscription query has no filter value. After first insert, we update our subscription query to watch one particular example record.
 ![](./assets/6.gif)
 
@@ -219,6 +223,8 @@ mutation updateExample($id:uuid,$data: jsonb) {
   }
 }
 ```
+
+
 ![](./assets/7.gif)
 
 - **Deleting record:** Delete operation is also an insert operation with an `id` and `deleted`(with value set to `true`). 
@@ -236,9 +242,12 @@ mutation deleteExample($id:uuid) {
   }
 }
 ```
+
+
 ![](./assets/8.gif)
 
 - **Undelete/Recover record:** This just another update operation. As value of `delete` column is not set to `true` for last version of a particular example record, we will see it back with all recious versions retained!
+
 
 ```
 mutation updateExample($id:uuid,$data: jsonb) {
@@ -253,6 +262,8 @@ mutation updateExample($id:uuid,$data: jsonb) {
   }
 }
 ```
+
+
 ![](./assets/9.gif)
 
 
