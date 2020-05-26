@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS versioned.example
 COMMENT ON TABLE versioned.example IS 'an example table';
 ```
 
-#### STEP 2 -> Meet our DB view: _example_	
+#### STEP 2 - Meet our DB view: _example_	
 
 This part is the most tricky part of all. We need to create a `SQL View` to represent the most current version of the example record sharing the same `id` value. Additionally, we need to access the `created_at` value of our very first version of a example record with the same `id`. If the *most recent* record has `deleted` with `true` as value, then we need to hide it so it doesnt appear in this layer.
 
@@ -144,14 +144,14 @@ This is one of many ways of retrieving `first/last value within group`. In real 
 Don't forget to add it to Hasura:
 ![](./assets/3b.gif)
 
-#### STEP 3-> Meet our relation: _versions_
+#### STEP 3 - Meet our relation: _versions_
 As I promised, our approach will **_let you see all historical versions along side with current version_**.
 We will connect `versioned.example` table with `public.example` view on `id` column. As each example record potentially has many versions, we need one to many, aka array,  relationship. _Hasura Relationships_ comes to our resque:
 ![](./assets/5.gif)
 
 Now we are able to reference each version of our record alongside with most recent one.
 
-#### STEP 4 -> This is not the step you are looking for.
+#### STEP 4 - This is not the step you are looking for.
 No more steps. We are done and let's enjoy our new API. Here is a glimpse of joyful use of real-time versioned API we have just created without wasted sprints by a team of engineers. I'm going to add/update/delete/undelete an example record using Hasura GraphiQL UI. In the meantime, all of my actions will be tracked in real-time using a GraphQL subscription query.
 
 Let's have a look at our query:
